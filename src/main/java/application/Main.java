@@ -1,7 +1,7 @@
 package application;
 
 import application.controller.Controller2D;
-import application.view.View2D;
+import application.view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -20,9 +20,13 @@ public class Main extends Application {
         Scene scene = new Scene(root);
 
         Controller2D c2D = new Controller2D();
-        View2D view2D = new View2D(c2D);
-
+        View view2D = new View(c2D);
         stage.setScene(scene);
+
+
+        //view2D.rootBox.getStylesheets().add(String.valueOf(this.getClass().getResource("interface.css")));
+
+
         stage.show();
     }
 

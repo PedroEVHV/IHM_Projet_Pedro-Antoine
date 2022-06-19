@@ -1,0 +1,129 @@
+/*
+    Setup for all widgets
+ */
+.root {
+    -fx-background-color: linear-gradient(#BDD7EE, #66A2D8);
+
+}
+
+.label {
+    -fx-text-fill: #505F7B;
+}
+
+.separator {
+    -fx-fill: #1111D1;
+    -fx-border-color: #1111D1;
+
+}
+
+/*
+    Setup for specific labels
+ */
+
+#labelInfo {
+-fx-font-size: 20;
+}
+
+#latLabel {
+
+}
+
+#endDateLabel {
+
+}
+
+#geoLabel {
+    -fx-font-size: 20;
+}
+
+#intervalLabel {
+
+}
+
+#longLabel {
+
+}
+
+#posLabel {
+    -fx-font-size: 20;
+}
+
+#startDateLabel {
+
+}
+
+#dateSLabel {
+    -fx-font-size: 20;
+}
+
+#speciesSLabel {
+    -fx-font-size: 20;
+}
+
+#speciesNames {
+    -fx-font-size: 20;
+}
+/*
+    Setup for specific text fields
+ */
+#speciesSelectText{
+    -fx-background-color: #8FAADC;
+}
+
+/*
+    Setup for specific spinners
+ */
+
+#intervalSet {
+
+}
+
+#latSpinner {
+
+}
+
+#longSpinner {
+
+}
+/*
+    Setup for specific date pickers
+ */
+
+/*
+    Setup for specific sections
+ */
+
+#speciesSection {
+    -fx-padding: 10;
+    -fx-background-color: #B4C7E7;
+}
+
+#dateSection {
+    -fx-padding: 10;
+    -fx-background-color: #B4C7E7;
+}
+
+#geoSection {
+    -fx-padding: 10;
+    -fx-background-color: #B4C7E7;
+}
+
+#leftSection {
+    -fx-padding: 20;
+
+}
+
+#lowerSection {
+
+}
+
+#positionSection {
+    -fx-padding: 10;
+    -fx-background-color: #B4C7E7;
+}
+
+#rightSection {
+
+}
+
+
