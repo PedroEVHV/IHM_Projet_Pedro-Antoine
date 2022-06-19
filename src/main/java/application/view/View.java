@@ -8,18 +8,14 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.geometry.Point3D;
 import javafx.scene.*;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.input.PickResult;
+import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.PhongMaterial;
 import javafx.scene.shape.MeshView;
-import javafx.scene.shape.Sphere;
 
 public class View implements ViewInterface {
 
@@ -27,10 +23,8 @@ public class View implements ViewInterface {
 
     private String currSearchString;
 
-    private Group geometry = new Group();
-    private Group root3D = new Group();;
-    private Group towns = new Group();
-    private int zoomLevel = 0;
+    private final Group geometry = new Group();
+    private final Group root3D = new Group();
 
     public View(Controller2D c) {
         this.mainController = c;
@@ -86,7 +80,9 @@ public class View implements ViewInterface {
 
     @FXML VBox rightSection;
         //Right Area
-        @FXML Pane pane3D;
+        @FXML
+        FlowPane pane3D;
+            @FXML Pane view3D;
         @FXML HBox lowerSection;
             //Lower Section
             @FXML VBox speciesView;
@@ -144,7 +140,7 @@ public class View implements ViewInterface {
 
         // Add a camera group
         PerspectiveCamera camera = new PerspectiveCamera(true);
-        new CameraManager(camera, pane3D, root3D);
+        new CameraManager(camera, view3D, root3D);
 
         // Add point light
         PointLight light = new PointLight(Color.WHITE);
@@ -160,10 +156,11 @@ public class View implements ViewInterface {
         root3D.getChildren().add(ambientLight);
 
         // Create scene
-        SubScene subscene = new SubScene(root3D, 800, 600, true, SceneAntialiasing.BALANCED);
+        SubScene subscene = new SubScene(root3D, 750, 560
+                , true, SceneAntialiasing.BALANCED);
         subscene.setCamera(camera);
         subscene.setFill(Color.BLACK);
-        pane3D.getChildren().addAll(subscene);
+        view3D.getChildren().addAll(subscene);
 
         }
 

@@ -123,7 +123,16 @@
 }
 
 #rightSection {
+    -fx-padding: 20;
+}
 
+/*
+    Setup for 3D view
+ */
+
+#pane3D {
+
+    -fx-background-color: #144886;
 }
 
 

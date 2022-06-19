@@ -8,6 +8,7 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.FlowPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
@@ -63,10 +64,14 @@
          </padding>
       </VBox>
       <VBox fx:id="rightSection" prefHeight="800.0" prefWidth="900.0">
-         <Pane fx:id="pane3D" prefHeight="600.0" prefWidth="900.0">
+         <FlowPane fx:id="pane3D" alignment="CENTER" prefHeight="600.0" prefWidth="800.0" rowValignment="BOTTOM">
+            <children>
+               <Pane fx:id="view3D" prefHeight="560.0" prefWidth="750.0" />
+            </children>
             <VBox.margin>
-               <Insets bottom="50.0" left="50.0" right="50.0" top="50.0" />
-            </VBox.margin></Pane>
+               <Insets />
+            </VBox.margin>
+         </FlowPane>
          <HBox fx:id="lowerSection" prefHeight="200.0" prefWidth="900.0">
             <VBox fx:id="speciesView" alignment="TOP_CENTER" prefHeight="200.0" prefWidth="450.0">
                <Label fx:id="speciesNames" text="N/A" />
