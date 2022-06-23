@@ -1,6 +1,6 @@
 package application.view;
 
-import application.controller.Controller2D;
+import application.controller.Controller;
 import application.util.CameraManager;
 import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
@@ -19,14 +19,14 @@ import javafx.scene.shape.MeshView;
 
 public class View implements ViewInterface {
 
-    Controller2D mainController;
+    Controller mainController;
 
     private String currSearchString;
 
     private final Group geometry = new Group();
     private final Group root3D = new Group();
 
-    public View(Controller2D c) {
+    public View(Controller c) {
         this.mainController = c;
     }
 

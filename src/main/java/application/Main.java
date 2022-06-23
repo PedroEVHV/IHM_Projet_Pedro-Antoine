@@ -1,6 +1,7 @@
 package application;
 
-import application.controller.Controller2D;
+import application.controller.Controller;
+import application.model.Model;
 import application.view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -19,8 +20,9 @@ public class Main extends Application {
         stage.setTitle("Ocean view");
         Scene scene = new Scene(root);
 
-        Controller2D c2D = new Controller2D();
-        View view2D = new View(c2D);
+        Model model = new Model();model.setCurrSearch("a");
+        model.queryDataVerbose();
+        Controller c2D = new Controller();
         stage.setScene(scene);
 
 
