@@ -130,7 +130,7 @@ public class View implements ViewInterface {
         ObjModelImporter objImporter = new ObjModelImporter();
         try {
             //NOT WORKING ---> URL modelURL = this.getClass().getResource("C:\\Users\\pedro\\OneDrive\\Documents\\Java\\IHMprojet\\src\\main\\resources\\data\\Earth\\Earth\\earth.obj");
-            objImporter.read("src/main/resources/data/earth.obj");
+            objImporter.read("src/main/java/application/data/earth.obj");
         } catch (ImportException e) {
             System.out.println(e.getMessage());
         }

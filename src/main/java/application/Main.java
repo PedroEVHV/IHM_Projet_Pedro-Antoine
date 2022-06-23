@@ -1,8 +1,6 @@
 package application;
 
-import application.controller.Controller;
 import application.model.Model;
-import application.view.View;
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
@@ -16,20 +14,22 @@ public class Main extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
-        System.out.println(getClass().getResource("src/main/resources/application/view.fxml"));
-        System.out.println(getClass().getResource("ressources/application/view.fxml"));
-        System.out.println(getClass().getResource("C:\\Users\\pedro\\OneDrive\\Documents\\Java\\IHM_Projet_Pedro-Antoine\\src\\main\\resources\\application\\view.fxml"));
-        System.out.println(getClass().getResource("https://github.com/PedroEVHV/IHM_Projet_Pedro-Antoine/blob/0e3a2f26fba9f2818e7f1b1577d20b16854355eb/src/main/resources/application/view.fxml"));
-        System.out.println(getClass().getResource("src/main/resources/application/view.fxml"));
-        System.out.println(getClass().getResource("test.fxml"));
-        System.out.println(getClass().getResource("jetbrains://idea/navigate/reference?project=IHM_Projet_Pedro-Antoine&path=src/main/resources/application/view.fxml"));
+
+        System.out.println(getClass().getResource("https://github.com/PedroEVHV/IHM_Projet_Pedro-Antoine/blob/8ca3b79f6e2a910fbd27c0bfcbaaa68933f0deac/src/main/java/application/view.fxml"));
+        System.out.println(getClass().getResource("src/main/java/application/view.fxml"));
+        System.out.println(getClass().getResource("application/view.fxml"));
+        System.out.println(getClass().getResource("D:\\Java\\JavaFX projects\\IHM_Projet_Pedro-Antoine\\src\\main\\java\\application\\view.fxml"));
+        System.out.println(getClass().getResource("D:\\Java\\JavaFX projects\\IHM_Projet_Pedro-Antoine\\src\\main\\java\\application\\interface.css"));
+        System.out.println(getClass().getResource("https://github.com/PedroEVHV/IHM_Projet_Pedro-Antoine/blob/8ca3b79f6e2a910fbd27c0bfcbaaa68933f0deac/src/main/java/application/interface.css"));
+        System.out.println(getClass().getResource("src/main/java/application/interface.css"));
+        System.out.println(getClass().getResource("interface.css"));
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("view.fxml"))));
+
         stage.setTitle("Ocean view");
         Scene scene = new Scene(root);
 
         Model model = new Model();model.setCurrSearch("a");
         model.queryDataVerbose();
-        Controller c2D = new Controller();
         stage.setScene(scene);
 
 
