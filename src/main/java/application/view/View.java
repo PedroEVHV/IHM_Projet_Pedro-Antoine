@@ -1,40 +1,28 @@
-//Test
-
 package application.view;
 
+import application.Main;
 import application.controller.Controller;
-import application.util.CameraManager;
-import com.interactivemesh.jfx.importer.ImportException;
-import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.*;
 import javafx.scene.control.*;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
-import javafx.scene.paint.Color;
-import javafx.scene.shape.MeshView;
 
 public class View implements ViewInterface {
 
-    Controller mainController;
+    Controller controller;
 
     private String currSearchString;
 
-    private final Group geometry = new Group();
-    private final Group root3D = new Group();
-
-    public View(Controller c) {
-        this.mainController = c;
-    }
-
     public View() {
-
+        this.controller = Main.controller;
     }
+    
+    PlaneteView planete = new PlaneteView();
 
     public @FXML HBox rootBox;
 
@@ -94,6 +82,10 @@ public class View implements ViewInterface {
                 //Info
                 @FXML Label labelInfo;
 
+
+
+
+    
     public void initialize() {
         //Load CSS properties
         //background #BDD7EE
@@ -104,7 +96,7 @@ public class View implements ViewInterface {
         //widget bg #B4C7E7
 
         //load earth
-        loadEarth();
+        planete.loadEarth(view3D);
 
         //Setup species Section
         speciesSelectText.textProperty().addListener(new ChangeListener<String>() {
@@ -119,54 +111,26 @@ public class View implements ViewInterface {
 
             }
         });
+        pane3D.pressedProperty().addListener(new ChangeListener<Boolean>() {
+            @Override
+            public void changed(ObservableValue<? extends Boolean> observableValue, Boolean aBoolean, Boolean t1) {
+
+            }
+        });
+        loadJSONData("D:\\Java\\JavaFX projects\\IHM_Projet_Pedro-Antoine\\src\\main\\java\\application\\Delphinidae.json");
 
         //Date setup
 
-        //
     }
-
-    public void loadEarth() {
-        // Load geometry
-        ObjModelImporter objImporter = new ObjModelImporter();
-        try {
-            //NOT WORKING ---> URL modelURL = this.getClass().getResource("C:\\Users\\pedro\\OneDrive\\Documents\\Java\\IHMprojet\\src\\main\\resources\\data\\Earth\\Earth\\earth.obj");
-            objImporter.read("src/main/java/application/data/earth.obj");
-        } catch (ImportException e) {
-            System.out.println(e.getMessage());
-        }
-        MeshView[] meshViews = objImporter.getImport();
-        Group earth = new Group(meshViews);
-        geometry.getChildren().add(earth);
-
-        root3D.getChildren().add(geometry);
-
-        // Add a camera group
-        PerspectiveCamera camera = new PerspectiveCamera(true);
-        new CameraManager(camera, view3D, root3D);
-
-        // Add point light
-        PointLight light = new PointLight(Color.WHITE);
-        light.setTranslateX(-180);
-        light.setTranslateY(-90);
-        light.setTranslateZ(-120);
-        light.getScope().addAll(root3D);
-        root3D.getChildren().add(light);
-
-        // Add ambient light
-        AmbientLight ambientLight = new AmbientLight(Color.WHITE);
-        ambientLight.getScope().addAll(root3D);
-        root3D.getChildren().add(ambientLight);
-
-        // Create scene
-        SubScene subscene = new SubScene(root3D, 750, 560
-                , true, SceneAntialiasing.BALANCED);
-        subscene.setCamera(camera);
-        subscene.setFill(Color.BLACK);
-        view3D.getChildren().addAll(subscene);
-
-        }
 
     public String getCurrSearchString() {
         return currSearchString;
+    }
+
+    public void loadJSONData(String file) {
+        planete.occForGeoHashList = controller.loadDataFromJSON(file);
+        planete.legend = controller.loadLegend();
+        planete.displayOccOnEarth2D();
+
     }
 }

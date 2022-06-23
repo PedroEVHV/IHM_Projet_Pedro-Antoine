@@ -11,11 +11,15 @@ module application {
     opens application.controller to javafx.fxml;
     opens application.model to javafx.fxml;
     opens application.view to javafx.fxml;
+    opens application.geohash to javafx.fxml;
+    opens application.util to javafx.fxml;
 
 
     exports application;
     exports application.controller;
     exports application.view;
     exports application.model;
+    exports application.geohash;
+    exports application.util;
 
 }
