@@ -31,7 +31,7 @@ public class Main extends Application {
         System.out.println(getClass().getResource("interface.css"));
         Parent root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("view.fxml"))));
 
-        stage.setTitle("Ocean view");
+        stage.setTitle("OBIS 3D");
         Scene scene = new Scene(root);
 
 

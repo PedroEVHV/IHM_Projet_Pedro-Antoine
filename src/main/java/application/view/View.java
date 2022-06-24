@@ -132,5 +132,6 @@ public class View implements ViewInterface {
         planete.legend = controller.loadLegend();
         planete.displayOccOnEarth2D();
 
+
     }
 }

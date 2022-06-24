@@ -10,25 +10,23 @@ import com.interactivemesh.jfx.importer.ImportException;
 import com.interactivemesh.jfx.importer.obj.ObjModelImporter;
 
 import javafx.geometry.Point3D;
-import javafx.scene.AmbientLight;
-import javafx.scene.Group;
-import javafx.scene.PerspectiveCamera;
-import javafx.scene.PointLight;
-import javafx.scene.SceneAntialiasing;
-import javafx.scene.SubScene;
+import javafx.scene.*;
+import javafx.scene.control.Spinner;
+import javafx.scene.effect.Light;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.paint.PhongMaterial;
-import javafx.scene.shape.Box;
-import javafx.scene.shape.MeshView;
-import javafx.scene.shape.TriangleMesh;
+import javafx.scene.shape.*;
 import javafx.scene.transform.Rotate;
+import javafx.scene.transform.Translate;
 
 
 public class PlaneteView {
 	
     //Controller controller;
-	
+
+    private boolean is3Don;
+
     private final Group geometry = new Group();
     private final Group root3D = new Group();
     
@@ -43,6 +41,7 @@ public class PlaneteView {
     
     public PlaneteView(/*Controller c*/) {
         //this.controller = c;
+        this.is3Don = true;
 
     }
 	
@@ -88,18 +87,36 @@ public class PlaneteView {
 	
 	void displayOccOnEarth2D() {
 		Group geoHash = new Group();
+        Sphere center1 = new Sphere(0.01);
+        center1.setTranslateX(1);
+        Sphere center2 = new Sphere(0.01);
+        center2.setMaterial(new PhongMaterial(Color.GREEN));
+        center2.setTranslateY(1);
+        Sphere center3 = new Sphere(0.01);
+        center3.setTranslateZ(1);
+        center3.setMaterial(new PhongMaterial(Color.BLUEVIOLET));
+        geoHash.getChildren().addAll(center1, center2, center3);
 		for(Map.Entry<String, Integer> e : occForGeoHashList.entrySet()) {
         	Color c = Color.rgb(0, 0, 0);
         	for(int i = 0; i < 7; i++) {
         		if((e.getValue() > legend[i]) && (e.getValue() <= legend[i+1])) {
+
         			c = colors[i];
         		}
-        	}        	
-        	Location loc = GeoHashHelper.getLocation(e.getKey());
-            AddQuadrilateral(geoHash, geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()+ (float) 0.7),geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()+ (float) 0.7), geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()- (float) 0.7),geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()- (float) 0.7), new PhongMaterial(c));
+            }
+            Location loc = GeoHashHelper.getLocation(e.getKey());
+
+            //AddQuadrilateral(geoHash, geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()+ (float) 0.7),geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()+ (float) 0.7), geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()- (float) 0.7),geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()- (float) 0.7), new PhongMaterial(c));
+            geohash3D(geoHash, e.getValue(), (float) loc.lat(), (float)loc.lng(), c);
+
+            if(is3Don) {
+
+            }
         }
 		geoHash.setScaleZ(1.001);
 		root3D.getChildren().add(geoHash);
+
+
 	}
 	
 	private Point3D geoCoordTo3dCoord(float lat, float lon) {
@@ -114,19 +131,81 @@ public class PlaneteView {
     }
 	
 	private void geohash3D(Group parent, int n, float lat, float lng, Color col) {
+        /*
     	double h = Math.sqrt(Math.sqrt(n)); 
     	Box box = new Box(0.02, h*(0.05), 0.02);
         box.setMaterial(new PhongMaterial(col));
         Group box_grp = new Group(box);
-        Point3D pos = geoCoordTo3dCoord(lat, lng);
+
         box_grp.setTranslateX(pos.getX());
         box_grp.setTranslateY(pos.getY());
         box_grp.setTranslateZ(pos.getZ());
-        
-        box_grp.getTransforms().add(new Rotate(60,Rotate.X_AXIS));
-        //Adding the transformation to rectangle
-        parent.getChildren().add(box_grp);
+        */
+        Point3D pos = geoCoordTo3dCoord(lat, lng);
+
+
+        //Rotation setup
+        Point3D origin = new Point3D(0,0,0);
+        Point3D anchor = new Point3D(1,0,0);
+
+        Cylinder cylinder = createCylinder(new Segment(origin, pos));
+
+
+
+        Group cgrp = new Group();
+        cgrp.getChildren().add(cylinder);
+
+        parent.getChildren().add(cgrp);
     }
+
+    private void matrixRotateNode(Node n, double alf, double bet, double gam){
+        double A11=Math.cos(alf)*Math.cos(gam);
+        double A12=Math.cos(bet)*Math.sin(alf)+Math.cos(alf)*Math.sin(bet)*Math.sin(gam);
+        double A13=Math.sin(alf)*Math.sin(bet)-Math.cos(alf)*Math.cos(bet)*Math.sin(gam);
+        double A21=-Math.cos(gam)*Math.sin(alf);
+        double A22=Math.cos(alf)*Math.cos(bet)-Math.sin(alf)*Math.sin(bet)*Math.sin(gam);
+        double A23=Math.cos(alf)*Math.sin(bet)+Math.cos(bet)*Math.sin(alf)*Math.sin(gam);
+        double A31=Math.sin(gam);
+        double A32=-Math.cos(gam)*Math.sin(bet);
+        double A33=Math.cos(bet)*Math.cos(gam);
+
+        double d = Math.acos((A11+A22+A33-1d)/2d);
+        if(d!=0d){
+            double den=2d*Math.sin(d);
+            Point3D p= new Point3D((A32-A23)/den,(A13-A31)/den,(A21-A12)/den);
+            n.setRotationAxis(p);
+            n.setRotate(Math.toDegrees(d));
+        }
+    }
+
+    static public Cylinder createCylinder(Segment segment) {
+        // x axis vector is <1,0,0>
+        // y axis vector is <0,1,0>
+        // z axis vector is <0,0,1>
+        // angle = arccos((P*Q)/(|P|*|Q|))
+        // define a point representing the Y axis
+        Point3D yAxis = new Point3D(0,1,0);
+        // define a point based on the difference of our end point from the start point of our segment
+        Point3D seg = segment.getEnd().subtract(segment.getStart());
+        // determine the length of our line or the height of our cylinder object
+        double height = seg.magnitude();
+        // get the midpoint of our line segment
+        Point3D midpoint = segment.getEnd().midpoint(segment.getStart());
+        // set up a translate transform to move to our cylinder to the midpoint
+        Translate moveToMidpoint = new Translate(midpoint.getX(), midpoint.getY(), midpoint.getZ());
+        // get the axis about which we want to rotate our object
+        Point3D axisOfRotation = seg.crossProduct(yAxis);
+        // get the angle we want to rotate our cylinder
+        double angle = Math.acos(seg.normalize().dotProduct(yAxis));
+        // create our rotating transform for our cylinder object
+        Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
+        // create our cylinder object representing our line
+        Cylinder line = new Cylinder(0.001, height);
+        // add our two transfroms to our cylinder object
+        line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
+        // return our cylinder for use
+        return line;
+    } // end of the createCylinder method
 	
 	private void AddQuadrilateral(Group parent, Point3D topRight, Point3D bottomRight, Point3D bottomLeft, Point3D topLeft, PhongMaterial material) {
     	final TriangleMesh triangleMesh = new TriangleMesh();
