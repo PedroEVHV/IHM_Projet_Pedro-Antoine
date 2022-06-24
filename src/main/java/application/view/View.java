@@ -117,7 +117,7 @@ public class View implements ViewInterface {
 
             }
         });
-        loadJSONData("D:\\Java\\JavaFX projects\\IHM_Projet_Pedro-Antoine\\src\\main\\java\\application\\Delphinidae.json");
+        loadJSONData("C:\\Users\\pedro\\OneDrive\\Documents\\Java\\IHM_Projet_Pedro-Antoine\\src\\main\\java\\application\\Delphinidae.json");
 
         //Date setup
 

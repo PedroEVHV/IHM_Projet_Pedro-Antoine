@@ -49,7 +49,7 @@ public class PlaneteView {
         // Load geometry
         ObjModelImporter objImporter = new ObjModelImporter();
         try {
-            objImporter.read("src/main/resources/data/earth.obj");
+            objImporter.read("src/main/java/application/data/earth.obj");
         } catch (ImportException e) {
             System.out.println(e.getMessage());
         }
@@ -106,11 +106,10 @@ public class PlaneteView {
             }
             Location loc = GeoHashHelper.getLocation(e.getKey());
 
-            //AddQuadrilateral(geoHash, geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()+ (float) 0.7),geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()+ (float) 0.7), geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()- (float) 0.7),geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()- (float) 0.7), new PhongMaterial(c));
-            geohash3D(geoHash, e.getValue(), (float) loc.lat(), (float)loc.lng(), c);
-
             if(is3Don) {
-
+                geohash3D(geoHash, e.getValue(), (float) loc.lat(), (float)loc.lng(), c);
+            } else {
+                AddQuadrilateral(geoHash, geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()+ (float) 0.7),geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()+ (float) 0.7), geoCoordTo3dCoord((float) loc.lat()- (float) 0.7, (float) loc.lng()- (float) 0.7),geoCoordTo3dCoord((float) loc.lat()+ (float) 0.7, (float) loc.lng()- (float) 0.7), new PhongMaterial(c));
             }
         }
 		geoHash.setScaleZ(1.001);
@@ -148,7 +147,19 @@ public class PlaneteView {
         Point3D origin = new Point3D(0,0,0);
         Point3D anchor = new Point3D(1,0,0);
 
-        Cylinder cylinder = createCylinder(new Segment(origin, pos));
+        double dx = pos.getX();
+        double dy = pos.getY();
+        double dz = pos.getZ();
+
+        double h = Math.sqrt(Math.sqrt(n));
+
+        dx += dx*h/10;
+        dy += dy*h/10;
+        dz += dz*h/10;
+
+
+        Cylinder cylinder = createCylinder(new Segment(origin, new Point3D(dx, dy, dz)));
+        cylinder.setMaterial(new PhongMaterial(col));
 
 
 
@@ -156,26 +167,6 @@ public class PlaneteView {
         cgrp.getChildren().add(cylinder);
 
         parent.getChildren().add(cgrp);
-    }
-
-    private void matrixRotateNode(Node n, double alf, double bet, double gam){
-        double A11=Math.cos(alf)*Math.cos(gam);
-        double A12=Math.cos(bet)*Math.sin(alf)+Math.cos(alf)*Math.sin(bet)*Math.sin(gam);
-        double A13=Math.sin(alf)*Math.sin(bet)-Math.cos(alf)*Math.cos(bet)*Math.sin(gam);
-        double A21=-Math.cos(gam)*Math.sin(alf);
-        double A22=Math.cos(alf)*Math.cos(bet)-Math.sin(alf)*Math.sin(bet)*Math.sin(gam);
-        double A23=Math.cos(alf)*Math.sin(bet)+Math.cos(bet)*Math.sin(alf)*Math.sin(gam);
-        double A31=Math.sin(gam);
-        double A32=-Math.cos(gam)*Math.sin(bet);
-        double A33=Math.cos(bet)*Math.cos(gam);
-
-        double d = Math.acos((A11+A22+A33-1d)/2d);
-        if(d!=0d){
-            double den=2d*Math.sin(d);
-            Point3D p= new Point3D((A32-A23)/den,(A13-A31)/den,(A21-A12)/den);
-            n.setRotationAxis(p);
-            n.setRotate(Math.toDegrees(d));
-        }
     }
 
     static public Cylinder createCylinder(Segment segment) {
@@ -200,10 +191,10 @@ public class PlaneteView {
         // create our rotating transform for our cylinder object
         Rotate rotateAroundCenter = new Rotate(-Math.toDegrees(angle), axisOfRotation);
         // create our cylinder object representing our line
-        Cylinder line = new Cylinder(0.001, height);
+        Cylinder line = new Cylinder(0.01, height);
         // add our two transfroms to our cylinder object
         line.getTransforms().addAll(moveToMidpoint, rotateAroundCenter);
-        // return our cylinder for use
+
         return line;
     } // end of the createCylinder method
 	
